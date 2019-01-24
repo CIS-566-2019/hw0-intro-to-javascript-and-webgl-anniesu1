@@ -53,7 +53,6 @@ function main() {
   gui.add(controls, 'green', 0, 255);
   gui.add(controls, 'blue', 0, 255);
   gui.add(controls, 'shader', [ 'lambert', 'gradient' ]);
-  
 
   // Get canvas and webgl context
   const canvas = <HTMLCanvasElement> document.getElementById('canvas');
@@ -79,11 +78,13 @@ function main() {
     new Shader(gl.VERTEX_SHADER, require('./shaders/lambert-vert.glsl')),
     new Shader(gl.FRAGMENT_SHADER, require('./shaders/lambert-frag.glsl')),
   ]);
+  lambert.setInitialTime();
 
   const custom = new ShaderProgram([
     new Shader(gl.VERTEX_SHADER, require('./shaders/custom-vert.glsl')),
     new Shader(gl.FRAGMENT_SHADER, require('./shaders/custom-frag.glsl')),
   ]);
+  custom.setInitialTime();
 
   // This function will be called every frame
   function tick() {
@@ -92,6 +93,9 @@ function main() {
     stats.begin();
     gl.viewport(0, 0, window.innerWidth, window.innerHeight);
     renderer.clear();
+
+    // Update time and pass to shaders
+    custom.incrementTime();
 
     if (controls.tesselations != prevTesselations) {
       prevTesselations = controls.tesselations;

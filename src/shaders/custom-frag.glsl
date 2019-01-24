@@ -6,6 +6,9 @@ precision highp float;
 // The color with which to render this instance of geometry
 uniform vec4 u_Color;
 
+// The time (which updates at every tick)
+uniform highp float u_Time;
+
 // These are the interpolated values out of the rasterizer, so you can't know
 // their specific values without knowing the vertices that contributed to them
 in vec4 fs_Nor;
@@ -26,7 +29,7 @@ void main() {
     // Define t as the Lambertian dot product
     float t = dot(normalize(fs_Nor), normalize(fs_LightVec));
 
-    // Compute final shaded color
-    vec3 palette = a + b * cos(2.0 * 3.141592653589 * (c * t + d));
+    // Compute final shaded color, using an offset of u_Time
+    vec3 palette = a + b * cos(2.0 * 3.141592653589 * (c * t + d) + (sin(u_Time / 50.0)));
     out_Col = vec4(palette[0], palette[1], palette[2], 1);
 }
